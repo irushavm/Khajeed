@@ -1,0 +1,15 @@
+<ion-view view-title="Topic">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="item in result">
+	<div class="list">
+	    <a class="item item-thumbnail-left" ng-click="goToPickedResult()">
+	      <img src={{item.imglink}}>
+	      <h2>{{item.title}}</h2>
+	      <p>{{item.price}}</p>
+	    </a>
+	</div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
