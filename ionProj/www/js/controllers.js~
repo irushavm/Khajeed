@@ -56,12 +56,11 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
+.controller('TopicsCtrl', function($scope) {
+  $scope.topics = [
     { title: 'Car', id: 1 },
     { title: 'Rent', id: 2 }
-  ];
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('TopicCtrl', function($scope, $stateParams) {
 });

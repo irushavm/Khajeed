@@ -54,22 +54,22 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+    .state('app.topics', {
+      url: '/topics',
       views: {
         'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
+          templateUrl: 'templates/topics.html',
+          controller: 'TopicsCtrl'
         }
       }
     })
 
   .state('app.single', {
-    url: '/playlists/:playlistId',
+    url: '/topics/:topicId',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'templates/topic.html',
+        controller: 'TopicCtrl'
       }
     }
   });

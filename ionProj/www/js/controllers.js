@@ -56,12 +56,11 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('ResultsCtrl', function($scope) {
-  $scope.results = [
+.controller('TopicsCtrl', function($scope) {
+  $scope.topics = [
     { title: 'Car', id: 1 },
-    { title: 'Rent', id: 2 }
-  ];
+    { title: 'Rent', id: 2 }]
 })
 
-.controller('ResultCtrl', function($scope, $stateParams) {
+.controller('TopicCtrl', function($scope, $stateParams) {
 });
