@@ -18,7 +18,7 @@ var job = new CronJob('0 * * * *', function() {
           console.log(data.find('.posteddate').text().replace(/\s/g, ''));
           console.log(data.find('img').prop('data-src'));
           console.log(data.find('a').prop('href')+'\n');
-        
+
         });
         // Finally, we'll define the variables we're going to capture
     }
