@@ -8,15 +8,15 @@ request(url, function(error, response, html){
 
   if(!error){
       // Next, we'll utilize the cheerio library on the returned html which will essentially give us jQuery functionality
-      //console.log(html);
       var $ = cheerio.load(html);
-      console.log('**************\nSECOND-TEST');
-      $('li.searchResultElem').each(function(i, elm){
+      $('li.searchResultElem').each(function(i, elm){ // Go through each of the top ads and the regular ads
 
-        var data = $(elm);
-
-        console.log(data.text());
-
+        var data = $(elm); // This holds all the data for a single listing
+        console.log(data.find('.title').text().replace(/\s/g, ' '));
+        console.log(data.find('.price').text().replace(/\s/g, ''));
+        console.log(data.find('.posteddate').text().replace(/\s/g, ''));
+        console.log(data.find('a').prop('href')+'\n');
+      
 
       });
       // Finally, we'll define the variables we're going to capture
