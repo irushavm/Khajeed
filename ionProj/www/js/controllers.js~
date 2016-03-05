@@ -59,8 +59,20 @@ angular.module('starter.controllers', [])
 .controller('TopicsCtrl', function($scope) {
   $scope.topics = [
     { title: 'Car', id: 1 },
-    { title: 'Rent', id: 2 }
+    { title: 'Rent', id: 2 }]
 })
 
-.controller('TopicCtrl', function($scope, $stateParams) {
+.controller('TopicCtrl', function($scope, $window, $state, $stateParams) {
+  $scope.result = [
+    { title: 'Frontenacs VS Ottawa 67 march 12 7:00pm (7) tickets', imglink: 'http://i.ebayimg.com/00/s/NDEzWDMxMA==/z/xrMAAOSwu1VW2d3k/$_35.JPG', url: 'http://www.kijiji.ca/v-tickets/kingston-on/frontenacs-vs-ottawa-67-march-12-7:00pm-7-tickets/1144997559', price: 'PRICE', id: 1 },
+    { title: 'YOLOFrontenacs VS Ottawa 67 march 12 7:00pm (7) tickets', imglink: 'http://i.ebayimg.com/00/s/NDEzWDMxMA==/z/xrMAAOSwu1VW2d3k/$_35.JPG', url: 'http://www.kijiji.ca/v-tickets/kingston-on/frontenacs-vs-ottawa-67-march-12-7:00pm-7-tickets/1144997559', price: 'PRICE', id: 2 }];
+
+	$scope.goToPickedResult = function(topicId) {
+		$window.pickedId = topicId;
+		$state.go('app.result');
+	};
+})
+
+.controller('ResultCtrl', function($scope, $window, $stateParams) {
+  $scope.pickedId = $window.pickedId;
 });
