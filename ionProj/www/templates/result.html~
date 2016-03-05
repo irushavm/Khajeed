@@ -5,7 +5,7 @@
 
       <div class="item item-avatar">
         <h2>{{info.title}}</h2>
-        <p>{{info.price}}</p>
+        <p>{{pickedId}}</p>
       </div>
 
       <div class="item item-body">

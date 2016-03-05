@@ -72,7 +72,17 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
         controller: 'TopicCtrl'
       }
     }
-  });
+  })
+
+   .state('app.result', {
+      url: '/result',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/result.html',
+          controller: 'ResultCtrl'
+        }
+      }
+    });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 });

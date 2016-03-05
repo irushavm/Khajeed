@@ -10,8 +10,7 @@ angular.module('starter.services', [])
 			if(successResponse.data.email === name) {
 				$window.loginstatus=1;			
 			}
-			$window.loginstatus=1;
-			$window.token = successResponse.data.id;	
+			$window.loginstatus=1;	
 		},
 		function (errorResponse) {
 			console.log(errorResponse);

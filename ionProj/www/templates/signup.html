@@ -1,9 +1,9 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Login</h1>
+    <h1 class="title">Signup</h1>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="doLogin()">
+    <form ng-submit="doSignup()">
       <div class="list">
         <label class="item item-input">
           <span class="input-label">Username</span>
@@ -14,10 +14,9 @@
           <input type="password" ng-model="data.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" ng-click="performLogin()">Log in</button> 
+          <button class="button button-block button-positive" ng-click="finishSignupProcess()">Signup</button> 
         </label>
       </div>
     </form>
-	<button class="button button-block button-positive" ng-click="performSignUp()">Sign Up</button>
   </ion-content>
 </ion-modal-view>
