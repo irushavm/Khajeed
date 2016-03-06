@@ -32,7 +32,8 @@
     "url": ""
   },
   "engines": {
-    "node": "4.3.2"
+    "node": "4.3.2",
+    "npm": "2.14.12"
   },
   "description": "Khajeed-server",
   "license": "MIT"
