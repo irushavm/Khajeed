@@ -94,24 +94,70 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('TopicsCtrl', function($scope) {
-  $scope.topics = [
-    { title: 'Car', id: 1 },
-    { title: 'Rent', id: 2 }]
+.controller('TopicsCtrl', function($scope,$window,$state,$http) {
+	$scope.getChoices = function(){
+		$http({
+		  method: 'GET',
+		  url: 'http://10.216.234.94:3000/api/Preferences/getList/',
+		  params: {access_token: $window.token}
+		}).then(function successCallback(response) {
+                    console.log(response);
+		    $scope.Choices = response.data;
+		    // this callback will be called asynchronously
+		    // when the response is available
+		  }, function errorCallback(response) {
+		    // called asynchronously if an error occurs
+		    // or server returns response with an error status.
+		  });
+	};
+	$scope.getSearchData = function(categoryId) {
+		$window.categoryId = categoryId;
+		// do the api call to get all the data using the topicId
+		$state.go('app.single');
+	};
+	$scope.getChoices();
 })
 
-.controller('TopicCtrl', function($scope, $window, $state, $stateParams) {
-  $scope.result = [
-    { title: 'Frontenacs VS Ottawa 67 march 12 7:00pm (7) tickets', imglink: 'http://i.ebayimg.com/00/s/NDEzWDMxMA==/z/xrMAAOSwu1VW2d3k/$_35.JPG', url: 'http://www.kijiji.ca/v-tickets/kingston-on/frontenacs-vs-ottawa-67-march-12-7:00pm-7-tickets/1144997559', price: 'PRICE', id: 1 },
-    { title: 'YOLOFrontenacs VS Ottawa 67 march 12 7:00pm (7) tickets', imglink: 'http://i.ebayimg.com/00/s/NDEzWDMxMA==/z/xrMAAOSwu1VW2d3k/$_35.JPG', url: 'http://www.kijiji.ca/v-tickets/kingston-on/frontenacs-vs-ottawa-67-march-12-7:00pm-7-tickets/1144997559', price: 'PRICE', id: 2 }];
-
+.controller('TopicCtrl', function($scope, $window, $state, $stateParams,$http) {
+	$scope.getSearchedData = function(){
+		$http({
+		  method: 'GET',
+		  url: 'http://10.216.234.94:3000/api/Listings/getSearchedList/',
+		  params: {prefId: $window.categoryId}
+		}).then(function successCallback(response) {
+		    console.log(response);
+		    $scope.searchedData = response.data;
+		    // this callback will be called asynchronously
+		    // when the response is available
+		  }, function errorCallback(response) {
+		    // called asynchronously if an error occurs
+		    // or server returns response with an error status.
+		  });
+	};
 	$scope.goToPickedResult = function(topicId) {
 		$window.pickedId = topicId;
 		// do the api call to get all the data using the topicId
 		$state.go('app.result');
 	};
+	$scope.getSearchedData();
 })
 
 .controller('ResultCtrl', function($scope, $window, $stateParams) {
-  $scope.pickedId = $window.pickedId;
+  	$scope.pickedId = $window.pickedId;
+
+	$scope.getListing = function(){
+		$http({
+		  method: 'GET',
+		  url: 'http://10.216.234.94:3000/api/Listings/getDetails/',
+		  params: {listingId: $scope.pickedId}
+		}).then(function successCallback(response) {
+		     console.log(response);
+		     $scope.details = response.data;
+		    // this callback will be called asynchronously
+		    // when the response is available
+		  }, function errorCallback(response) {
+		    // called asynchronously if an error occurs
+		    // or server returns response with an error status.
+		  });
+	};
 });

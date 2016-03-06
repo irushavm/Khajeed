@@ -1,9 +1,9 @@
-<ion-view view-title="Topic">
+<ion-view view-title="SearchedData">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="item in result">
+      <ion-item ng-repeat="item in searchedData">
 	<div class="list">
-	    <a class="item item-thumbnail-left" ng-click="goToPickedResult()">
+	    <a class="item item-thumbnail-left" ng-click="goToPickedResult({{item.id}})">
 	      <img src={{item.imglink}}>
 	      <h2>{{item.title}}</h2>
 	      <p>{{item.price}}</p>
