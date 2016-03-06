@@ -1,0 +1,31 @@
+<ion-view view-title="Result">
+  <ion-content>
+
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <h2>{{info.title}}</h2>
+        <p>{{pickedId}}</p>
+      </div>
+
+      <div class="item item-body">
+        <img class="full-image" src={{info.imglink}}>
+        <p>
+          Frontenacs VS Ottawa 67 seven tickets section 112 Row 7 Seat 4-5-6-7-8-9-10 Center ice section 112 Gold seats Retail price $24 asking $18 each any question you can call me or text me 343-363-1429
+        </p>
+        <p>
+        <button class="button button-block button-balanced" href={{info.url}}>
+  		Go-To-Link	
+		</button>
+        <button class="button button-block button-energized">
+  		Save
+		</button>
+	<button class="button button-block button-assertive">
+  		Discard
+		</button>
+        </p>
+      </div>
+
+    </div>
+  </ion-content>
+</ion-view>
