@@ -65,12 +65,11 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
       url: '/preferences',
       views: {
         'menuContent': {
-          templateUrl: 'templates/preferences.html'
+          templateUrl: 'templates/preferences.html',
+          controller: 'PreferencesCtrl' 
         }
-      },
-      controller: 'PreferencesCtrl' 
-      }       
-    )
+      }
+    })
 
     .state('app.topics', {
       url: '/topics',

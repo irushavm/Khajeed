@@ -74,22 +74,23 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PreferencesCtrl', function($scope,$state,$ionicPopup,$window,PreferencesService) {
-    $scope.data = {};
- 
-    $scope.addPreferences = function() {
-        PreferencesService.AddPrefs($scope.data.tittle, $scope.data.city, $scope.data.category, $scope.data.keywords, $scope.data.filters);
-        // $state.go('preferences');
+  $scope.data = {};
 
-        // if($window.token){       
-          var alertPopup = $ionicPopup.alert({
-             title: 'Preferences Added',
-             template: 'WE ADDED YOUR PREFERENCES!!!'
-          });
-        // }
-    };  
+  $scope.addPreferences = function() {
+      PreferencesService.AddPrefs(
+        $scope.data.tittle, $scope.data.city, $scope.data.category, $scope.data.keywords.split(", "), $scope.data.filters.split(", "));
+
+      // if($window.token){       
+      var alertPopup = $ionicPopup.alert({
+         title: 'Preferences Added',
+         template: 'WE ADDED YOUR PREFERENCES!!!'
+      });
+      $state.go('app.preferences');
+      // }
+  };  
 
   $scope.doPrefs = function() {
-    console.log('Doing preferences', $scope.prefsData);
+    console.log('Doing preferences', $scope.data);
   };
 
 })

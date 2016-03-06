@@ -22,7 +22,7 @@ angular.module('starter.services', [])
     return {
         AddPrefs: function(title, city, category, keys, fils) {
 	    var status;
-	        $http.post("http://10.216.234.94:3000/explorer/Preferences/addOne/", {
+	        $http.post("http://10.216.234.94:3000/api/Preferences/addOne/", {
 	        			"title":title,"city":city,"category":category,"keywords":keys,"filter":fils})
 			.then(function (successResponse) {
 				console.log(successResponse);
