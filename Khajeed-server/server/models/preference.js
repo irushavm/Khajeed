@@ -101,7 +101,12 @@ module.exports = function(Preference) {
         error.code = 'PREFERENCE_ADDITION_FAILED';
         return cb(error);
       }
-      return cb(null,{status:'success','data':'Preference Successfully Added'});
+      invokeScrape(result,function(error,response){
+        if(error) {
+          console.log(error);
+        }
+        return cb(null,{status:'success','data':'Preference Successfully Added'});
+      });
     });
 
   };
