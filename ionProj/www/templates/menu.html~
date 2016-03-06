@@ -22,7 +22,10 @@
           Preferences
         </ion-item>
         <ion-item menu-close href="#/app/topics">
-          Categories
+          Listings
+        </ion-item>
+	<ion-item menu-close href="#/app/preftopics">
+          Prefered Listings
         </ion-item>
       </ion-list>
     </ion-content>

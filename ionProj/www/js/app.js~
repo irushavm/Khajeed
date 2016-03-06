@@ -37,6 +37,12 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
       controller: 'LoginCtrl'
   })
 
+  .state('signup', {
+      url: '/signup',
+      templateUrl: 'templates/signup.html',
+      controller: 'SignupCtrl'
+  })
+
   .state('app.search', {
     url: '/search',
     views: {
@@ -54,6 +60,18 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
         }
       }
     })
+
+  .state('app.preferences', {
+      url: '/preferences',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/preferences.html'
+        }
+      },
+      controller: 'PreferencesCtrl' 
+      }       
+    )
+
     .state('app.topics', {
       url: '/topics',
       views: {

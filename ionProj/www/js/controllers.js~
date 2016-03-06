@@ -102,7 +102,7 @@ angular.module('starter.controllers', [])
 		  params: {access_token: $window.token}
 		}).then(function successCallback(response) {
                     console.log(response);
-		    $scope.Choices = response.data;
+		    $scope.choices = response.data.response.data;
 		    // this callback will be called asynchronously
 		    // when the response is available
 		  }, function errorCallback(response) {
@@ -123,10 +123,25 @@ angular.module('starter.controllers', [])
 		$http({
 		  method: 'GET',
 		  url: 'http://10.216.234.94:3000/api/Listings/getSearchedList/',
-		  params: {prefId: $window.categoryId}
+		  params: {prefId: $window.categoryId , access_token: $window.token}
 		}).then(function successCallback(response) {
 		    console.log(response);
-		    $scope.searchedData = response.data;
+		    $scope.searchedData = response.data.response.data;
+		    // this callback will be called asynchronously
+		    // when the response is available
+		  }, function errorCallback(response) {
+		    // called asynchronously if an error occurs
+		    // or server returns response with an error status.
+		  });
+	};
+	$scope.getFavoriteData = function(){
+		$http({
+		  method: 'GET',
+		  url: 'http://10.216.234.94:3000/api/Listings/getSavedList/',
+		  params: {prefId: $window.categoryId , access_token: $window.token}
+		}).then(function successCallback(response) {
+		    console.log(response);
+		    $scope.searchedData = response.data.response.data;
 		    // this callback will be called asynchronously
 		    // when the response is available
 		  }, function errorCallback(response) {
@@ -139,19 +154,17 @@ angular.module('starter.controllers', [])
 		// do the api call to get all the data using the topicId
 		$state.go('app.result');
 	};
-	$scope.getSearchedData();
 })
 
-.controller('ResultCtrl', function($scope, $window, $stateParams) {
-  	$scope.pickedId = $window.pickedId;
-
+.controller('ResultCtrl', function($scope, $window, $stateParams,$http) {
 	$scope.getListing = function(){
 		$http({
 		  method: 'GET',
 		  url: 'http://10.216.234.94:3000/api/Listings/getDetails/',
-		  params: {listingId: $scope.pickedId}
+		  params: {listingId: $window.pickedId , access_token: $window.token}
 		}).then(function successCallback(response) {
 		     console.log(response);
+		     $scope.details = response.data.response.data;
 		    // this callback will be called asynchronously
 		    // when the response is available
 		  }, function errorCallback(response) {
@@ -159,4 +172,19 @@ angular.module('starter.controllers', [])
 		    // or server returns response with an error status.
 		  });
 	};
+
+	$scope.saveListing = function(listingId){
+		$http({
+		  method: 'POST',
+		  url: 'http://10.216.234.94:3000/api/Listings/saveListing/',
+		  params: {id:listingId, access_token: $window.token}
+		}).then(function (successResponse) {
+				console.log(successResponse);	
+			},
+			function (errorResponse) {
+				console.log(errorResponse);
+			});
+	};
+
+	$scope.getListing();
 });

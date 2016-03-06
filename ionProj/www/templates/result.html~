@@ -1,27 +1,27 @@
 <ion-view view-title="Result">
   <ion-content>
-
     <div class="list card">
 
       <div class="item item-avatar">
-        <h2>{{info.title}}</h2>
-        <p>{{pickedId}}</p>
+        <h1>{{details.title}}</h1>
+        <h2>{{details.price}}</h2>
       </div>
 
       <div class="item item-body">
-        <img class="full-image" src={{info.imglink}}>
+        <img class="full-image" src={{details.imageLink}}>
         <p>
-          Frontenacs VS Ottawa 67 seven tickets section 112 Row 7 Seat 4-5-6-7-8-9-10 Center ice section 112 Gold seats Retail price $24 asking $18 each any question you can call me or text me 343-363-1429
+         {{details.description}}
         </p>
         <p>
-        <button class="button button-block button-balanced" href={{info.url}}>
+        <a class="button button-block button-balanced" href="{{details.link}}">
   		Go-To-Link	
-		</button>
-        <button class="button button-block button-energized">
+		</a>
+	
+        <button class="button button-block button-energized ng-hide" ng-hide="{{details.itemSaved}}" ng-click="saveListing({{details.id}})">
   		Save
 		</button>
-	<button class="button button-block button-assertive">
-  		Discard
+	<button class="button button-block button-assertive ng-hide" ng-hide="!{{details.itemSaved}}" ng-click="saveListing({{details.id}})">
+  		Remove
 		</button>
         </p>
       </div>

@@ -1,10 +1,18 @@
 <ion-view view-title="SearchedData">
-  <ion-content>
+  <ion-content class="has-tabs" >
+	<div class="tabs" class="has-header has-subheader">
+	  <a class="tab-item" ng-click="getSearchedData()">
+	    Latest
+	  </a>
+	  <a class="tab-item" ng-click="getFavoriteData()">
+	    Favorites
+	  </a>
+	</div>
     <ion-list>
       <ion-item ng-repeat="item in searchedData">
 	<div class="list">
 	    <a class="item item-thumbnail-left" ng-click="goToPickedResult({{item.id}})">
-	      <img src={{item.imglink}}>
+	      <img src={{item.imageLink}}>
 	      <h2>{{item.title}}</h2>
 	      <p>{{item.price}}</p>
 	    </a>

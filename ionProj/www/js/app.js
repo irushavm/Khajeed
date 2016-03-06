@@ -99,6 +99,36 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
           controller: 'ResultCtrl'
         }
       }
+    })
+
+ .state('app.preftopics', {
+      url: '/preftopics',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/preftopics.html',
+          controller: 'PrefTopicsCtrl'
+        }
+      }
+    })
+
+  .state('app.prefsingle', {
+    url: '/preftopics/:preftopicId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/preftopic.html',
+        controller: 'PrefTopicCtrl'
+      }
+    }
+  })
+
+   .state('app.prefresult', {
+      url: '/prefresult',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/prefresult.html',
+          controller: 'PrefResultCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
