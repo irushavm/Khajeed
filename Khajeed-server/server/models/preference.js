@@ -2,6 +2,8 @@ var request = require('request');
 var cheerio = require('cheerio');
 var CronJob = require('cron').CronJob;
 
+var listOfPrefs = {}
+
 module.exports = function(Preference) {
 
   var PREF_LOCATIONS = {
@@ -100,20 +102,33 @@ module.exports = function(Preference) {
         error.code = 'PREFERENCE_ADDITION_FAILED';
         return cb(error);
       }
-      newModel.id = result.id;
-      invokeScrape(newModel, function(err,postData){
-        if(err) {
-          error = new Error('invokeScrape Failed '+err);
-          error.statusCode = 500;
-          error.code = 'INVOKESCRAPE_FAILED';
-          return cb(error);
-        }
-
         return cb(null,{status:'success','data':'Preference Successfully Added'});
 
-      });
     });
   };
+
+
+  function getAndPushResults () {
+      Preference.find({}), function(result) {
+        result.forEach(
+          )
+      }
+  } 
+
+var CronJob = require('cron').CronJob;
+new CronJob('* * * * *', function() {
+  console.log('You will see this message every hour');
+  Preference.find({},function(error,data){
+      data.forEach(function(item) {
+        invokeScrape(preference,function(error,response){
+          if(error) {
+            console.log(error);
+          }
+        });
+      });
+
+  });
+}, null, true, 'America/Los_Angeles').start();
 
 
   function invokeScrape (preference,cb) {
@@ -141,8 +156,8 @@ module.exports = function(Preference) {
                 return cb(new Error('Listing Find Failed ', err));
               }
 
-              //If no recod of listing exists in database
-              if(!findResult.length) {
+              //If no record of listing exists in database or if the title does not match a filter word
+              if((!findResult.length)&&(preference.filter.replace(' ','').indexOf(itemTitle)>-1)) {
                 var newModel = {
                   title: itemTitle,
                   price: data.find('.price').text().replace(/\s/g, ''),
