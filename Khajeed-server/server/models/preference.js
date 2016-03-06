@@ -107,7 +107,7 @@ module.exports = function(Preference) {
 
   };
 
-  new CronJob('*/5 * * * * *', function() {
+  new CronJob('* * * * *', function() {
    console.log('You will see this message every hour');
     console.log(preferenceList);
        preferenceList.forEach(function(item) {
