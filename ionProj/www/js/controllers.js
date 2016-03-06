@@ -43,19 +43,19 @@ angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope,$state,$ionicPopup,$window,LoginService) {
     $scope.data = {};
- 
+
   $scope.performLogin = function() {
-      LoginService.loginUser($scope.data.username, $scope.data.password);
-    
-      if($window.token){       
-        $state.go('app.preferences');
-      }
-      else{
-        var alertPopup = $ionicPopup.alert({
-           title: 'Login Failed!',
-           template: 'Please Check your information!!!'
-        }); 
-      }
+      LoginService.loginUser($scope.data.username, $scope.data.password,function (){
+        if($window.token){
+          $state.go('app.preferences', {}, {reload: true});
+        }
+        else{
+          var alertPopup = $ionicPopup.alert({
+             title: 'Login Failed!',
+             template: 'Please Check your information!!!'
+          });
+        }
+      });
     };
 
   $scope.performSignUp = function() {
@@ -65,10 +65,10 @@ angular.module('starter.controllers', [])
 
 .controller('SignupCtrl', function($scope,$state,$ionicPopup,SignupService) {
     $scope.data = {};
- 
+
     $scope.finishSignupProcess = function() {
         SignupService.signupUser($scope.data.username, $scope.data.password);
-	$state.go('login');
+	$state.go('login', {}, {reload: true});
     };
 
 })
@@ -80,14 +80,14 @@ angular.module('starter.controllers', [])
       PreferencesService.AddPrefs(
         $scope.data.tittle, $scope.data.city, $scope.data.category, $scope.data.keywords.split(", "), $scope.data.filters.split(", "));
 
-      // if($window.token){       
+      // if($window.token){
       var alertPopup = $ionicPopup.alert({
          title: 'Preferences Added',
          template: 'WE ADDED YOUR PREFERENCES!!!'
       });
-      $state.go('app.preferences');
+      $state.go('app.preferences', {}, {reload: true});
       // }
-  };  
+  };
 
   $scope.doPrefs = function() {
     console.log('Doing preferences', $scope.data);
@@ -114,13 +114,15 @@ angular.module('starter.controllers', [])
 	$scope.getSearchData = function(categoryId) {
 		$window.categoryId = categoryId;
 		// do the api call to get all the data using the topicId
-		$state.go('app.single');
+		$state.go('app.single', {}, {reload: true});
 	};
 	$scope.getChoices();
+
 })
 
 .controller('TopicCtrl', function($scope, $window, $state, $stateParams,$http) {
 	$scope.getSearchedData = function(){
+    $scope.searchedData = [];
 		$http({
 		  method: 'GET',
 		  url: 'http://10.216.234.94:3000/api/Listings/getSearchedList/',
@@ -153,11 +155,13 @@ angular.module('starter.controllers', [])
 	$scope.goToPickedResult = function(topicId) {
 		$window.pickedId = topicId;
 		// do the api call to get all the data using the topicId
-		$state.go('app.result');
+		$state.go('app.result', {}, {reload: true});
 	};
+
+  	$scope.getSearchedData();
 })
 
-.controller('ResultCtrl', function($scope, $window, $stateParams,$http) {
+.controller('ResultCtrl', function($scope, $window, $stateParams,$state,$http) {
 	$scope.getListing = function(){
 		$http({
 		  method: 'GET',
@@ -180,7 +184,7 @@ angular.module('starter.controllers', [])
 		  url: 'http://10.216.234.94:3000/api/Listings/saveListing/',
 		  params: {listingId:$window.pickedId, access_token: $window.token}
 		}).then(function (successResponse) {
-				console.log(successResponse);	
+				console.log(successResponse);
 			},
 			function (errorResponse) {
 				console.log(errorResponse);
@@ -193,7 +197,8 @@ angular.module('starter.controllers', [])
 		  url: 'http://10.216.234.94:3000/api/Listings/removeListing/',
 		  params: {listingId:$window.pickedId, access_token: $window.token}
 		}).then(function (successResponse) {
-				console.log(successResponse);	
+				console.log(successResponse);
+        $state.go('app.single', {}, {reload: true});
 			},
 			function (errorResponse) {
 				console.log(errorResponse);

@@ -1,22 +1,22 @@
 <ion-view view-title="SearchedData">
   <ion-content class="has-tabs" style="padding-top:1.2cm" class="padding">
-	<div class="tabs" class="has-header has-subheader">
-	  <a class="tab-item" ng-click="getSearchedData()">
-	    Latest
-	  </a>
-	  <a class="tab-item" ng-click="getFavoriteData()">
-	    Favorites
-	  </a>
-	</div>
-    <ion-list>
+  	<div class="tabs" class="has-header has-subheader">
+  	  <a class="tab-item" ng-click="getSearchedData()">
+  	    Latest
+  	  </a>
+  	  <a class="tab-item" ng-click="getFavoriteData()">
+  	    Favorites
+  	  </a>
+  	</div>
+    <ion-list class="has-header has-subheader has-tabs">
       <ion-item ng-repeat="item in searchedData">
-	<div class="list">
-	    <a class="item item-thumbnail-left" ng-click="goToPickedResult({{item.id}})">
-	      <img src={{item.imageLink}}>
-	      <h2>{{item.title}}</h2>
-	      <p>{{item.price}}</p>
-	    </a>
-	</div>
+      	<div class="list">
+      	    <a class="item item-thumbnail-left" ng-click="goToPickedResult({{item.id}})">
+      	      <img src={{item.imageLink}}>
+      	      <h2>{{item.title}}</h2>
+      	      <p>{{item.price}}</p>
+      	    </a>
+      	</div>
       </ion-item>
     </ion-list>
   </ion-content>

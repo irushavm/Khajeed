@@ -124,7 +124,7 @@ module.exports = function(Preference) {
                 console.log(error);
               }
             });
-          }, 10000);
+          }, 1000);
        });
       });
     }, null, true, 'America/Los_Angeles',null,true).start();
@@ -132,9 +132,16 @@ module.exports = function(Preference) {
 
 
   function invokeScrape (preference,cb) {
-
-    var url = 'http://m.kijiji.ca/old-video-games/ottawa/f?categoryId=' +
-    PREF_CATEGORIES[preference.category] + '&locationId=' + PREF_LOCATIONS[preference.city]+'&q='+preference.keywords.join('+');
+    console.log(preference);
+    var url;
+    if(Array.isArray(preference.keywords)){
+      url = 'http://m.kijiji.ca/old-video-games/ottawa/f?categoryId=' +
+      PREF_CATEGORIES[preference.category] + '&locationId=' + PREF_LOCATIONS[preference.city]+'&q='+preference.keywords.join('+');
+    }
+    else{
+       url = 'http://m.kijiji.ca/old-video-games/ottawa/f?categoryId=' +PREF_CATEGORIES[preference.category] +
+       '&locationId=' + PREF_LOCATIONS[preference.city];
+    }
     console.log('************RUNNING SCRAPER');
     request(url, function(error, response, html) {
 
@@ -156,9 +163,8 @@ module.exports = function(Preference) {
                 return cb(new Error('Listing Find Failed ', err));
               }
 
-              if((!findResult.length) && preference.filter &&
-              Array.isArray(preference.filter) &&
-              (preference.filter.indexOf(itemTitle)>-1)) {
+              if((!findResult.length) //&&(preference.filter.indexOf(itemTitle)>-1)
+              ) {
               //If no record of listing exists in database or if the title does not match a filter word
                 var newModel = {
                   title: itemTitle,
@@ -178,6 +184,7 @@ module.exports = function(Preference) {
                   var timeNow = new Date().toISOString().split('T')[1];
                   newModel.postDate = '2016-'+tempDate[1]+'-'+tempDate[0]+'T'+timeNow;
                 }
+                console.log(newModel);
                 Preference.app.models.Listing.create(newModel, function (err, data) {
                   if(err) {
                     error = new Error('webScrape Model Update Failed '+err);
