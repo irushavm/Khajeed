@@ -22,6 +22,7 @@ module.exports = function(Preference) {
   };
 
   Preference.getList = function(cb) {
+    var error;
     //Find List of Saved Queries
     Preference.find({
       where:{
@@ -29,27 +30,42 @@ module.exports = function(Preference) {
       }
     },function (err,result) {
       if(err) {
-        return cb(new Error('Preference Listing Get Failed',result));
+        error = new Error('Preference Listing Get Failed '+err);
+        error.statusCode = 500;
+        error.code = 'PREFERANCE_LISTING_GET_FAILED';
+        return cb(error);
       }
       return cb(null,{status:'success','data':result});
     });
   };
 
   Preference.removeOne = function (prefId,cb) {
+    var error;
+    if(!prefId) {
+      error = new Error('Parameters Missing');
+      error.statusCode = 400;
+      error.code = 'PARAMETERS_MISSING';
+      return cb(error);
+    }
     //Find List of Saved Queries
-    console.log(prefId);
     Preference.app.models.Listing.destroyAll({
         and:[{userId:Preference.app.currentUserId},{preferenceId:prefId}]
     },function (err, listResult) {
       if(err) {
-        return cb(new Error('Listings Remove for Preference Failed',listResult));
+        error = new Error('Listings Remove for Preference Failed '+err);
+        error.statusCode = 500;
+        error.code = 'LISTING_REMOVE_FOR_PREFERENCE_FAILED';
+        return cb(error);
       }
       Preference.destroyAll({
         and:[{userId:Preference.app.currentUserId},{id:prefId}]
       },function (err,result) {
         console.log(result);
         if(err) {
-          return cb(new Error('Preference Remove Failed',result));
+          error = new Error('Preference Remove Failed '+err);
+          error.statusCode = 500;
+          error.code = 'PREFERENCE_REMOVE_FAILED';
+          return cb(error);
         }
         return cb(null,{status:'success','data':'Preference Successfully Removed'});
       });
@@ -58,6 +74,13 @@ module.exports = function(Preference) {
   };
 
   Preference.addOne = function (data,cb) {
+    var error;
+    if(!data.title || ! data.city || !data.category) {
+      error = new Error('Parameters Missing');
+      error.statusCode = 400;
+      error.code = 'PARAMETERS_MISSING';
+      return cb(error);
+    }
     //Find List of Saved Queries
     var newModel = {
       title: data.title,
@@ -69,15 +92,21 @@ module.exports = function(Preference) {
     };
 
     Preference.create(newModel,function (err,result) {
-
+      var error;
       console.log(result);
       if(err) {
-        return cb(new Error('Preference Addition Failed ',result));
+        error = new Error('Preference Addition Failed '+err);
+        error.statusCode = 500;
+        error.code = 'PREFERENCE_ADDITION_FAILED';
+        return cb(error);
       }
       newModel.id = result.id;
       invokeScrape(newModel, function(err,postData){
         if(err) {
-          return cb(new Error('invokeScrape Failed ',data));
+          error = new Error('invokeScrape Failed '+err);
+          error.statusCode = 500;
+          error.code = 'INVOKESCRAPE_FAILED';
+          return cb(error);
         }
 
         return cb(null,{status:'success','data':'Preference Successfully Added'});
@@ -90,7 +119,7 @@ module.exports = function(Preference) {
   function invokeScrape (preference,cb) {
 
     var url = 'http://m.kijiji.ca/old-video-games/ottawa/f?categoryId=' +
-    PREF_CATEGORIES[preference.category] + '&locationId=' + PREF_LOCATIONS[preference.city];
+    PREF_CATEGORIES[preference.category] + '&locationId=' + PREF_LOCATIONS[preference.city]+'&q='+preference.keywords.join('+');
     console.log('************RUNNING SCRAPER');
     request(url, function(error, response, html) {
 
@@ -103,6 +132,7 @@ module.exports = function(Preference) {
 
             // Holds the web-scraped data
             var data = $(elm);
+            var itemTitle = data.find('.title').text().replace(/\s/g, ' ');
             var itemImageLink = data.find('img').prop('data-src');
 
             //Check if the listing already exists in the database using the iamge link
@@ -114,7 +144,7 @@ module.exports = function(Preference) {
               //If no recod of listing exists in database
               if(!findResult.length) {
                 var newModel = {
-                  title: data.find('.title').text().replace(/\s/g, ' '),
+                  title: itemTitle,
                   price: data.find('.price').text().replace(/\s/g, ''),
                   imageLink:itemImageLink,
                   userId: currUID,
@@ -133,7 +163,10 @@ module.exports = function(Preference) {
                 }
                 Preference.app.models.Listing.create(newModel, function (err, data) {
                   if(err) {
-                    return cb(new Error('webScrape Model Update Failed ',err));
+                    error = new Error('webScrape Model Update Failed '+err);
+                    error.statusCode = 500;
+                    error.code = 'INVOKESCRAPE_MODEL_UPDATE_FAILED';
+                    return cb(error);
                   }
                 });
               }
