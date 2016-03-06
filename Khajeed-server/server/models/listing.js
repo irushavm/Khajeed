@@ -1,70 +1,153 @@
 var request = require('request');
 var cheerio = require('cheerio');
-
 module.exports = function(Listing) {
-  Listing.getList = function (cb) {
-    //Find Listing model from Datasource
-    Listing.find({},function (err,result) {
+
+  Listing.getSavedList = function (prefId,cb) {
+    //Find List of Saved Queries
+    Listing.find({
+      fields:['title','imageLink','name','price','id'],
+      where:{
+        and:[{userId:Listing.app.currentUserId},{itemSaved:true},{preferenceId:prefId}]
+      }
+    },function (err,result) {
       if(err) {
-        return cb(new Error('webScrape Model Update Failed',result));
+        return cb(new Error('Saved Listing Get Failed',result));
       }
       return cb(null,{status:'success','data':result});
     });
   };
 
-
-  Listing.invokeScrape = function (cb) {
-    
-    var url = 'http://m.kijiji.ca/old-video-games/ottawa/f?categoryId=623&locationId=1700185';
-    request(url, function(error, response, html){
-
-      if(!error){
-          // Next, we'll utilize the cheerio library on the returned html which will essentially give us jQuery functionality
-          var $ = cheerio.load(html);
-          $('li.searchResultElem').each(function(i, elm){ // Go through each of the top ads and the regular ads
-            var newModel = {};
-            var data = $(elm); // This holds all the data for a single listing
-            newModel.title = data.find('.title').text().replace(/\s/g, ' ');
-            newModel.price = data.find('.price').text().replace(/\s/g, '');
-            var tempDate = data.find('.posteddate').text().replace(/\s/g, '').split('-');
-            console.log('************TEMP-DATE: ', tempDate.length);
-            if (tempDate[0] === '' || tempDate[1] === '') {
-              newModel.postDate = new Date().toISOString();
-            }
-            else {
-              var timeNow = new Date().toISOString().split('T')[1];
-              newModel.postDate = '2016-'+tempDate[1]+'-'+tempDate[0]+'T'+timeNow;
-            }
-            newModel.imageLink = data.find('img').prop('data-src');
-            newModel.link = data.find('a').prop('href');
-            console.log(newModel);
-            Listing.upsert(newModel, function (err, data) {
-              console.log(err, data);
-              if(err) {
-                return cb(new Error('webScrape Model Update Failed',data));
-              }
-            });
-          });
-
-          return cb(null,{'status':'success','data':'Models added successfully'});
+  Listing.getSearchedList = function (prefId,cb) {
+    //Find List of the selected Search Query
+    Listing.find({
+      fields:['title','imageLink','name','price','id'],
+      where: {
+        userId:Listing.app.currentUserId
       }
-
+    },function (err,result) {
+      if(err) {
+        return cb(new Error('Searched Listing Get Failed',result));
+      }
+      return cb(null,{status:'success','data':result});
     });
   };
 
-  Listing.remoteMethod('getList',
+  Listing.getDetails = function (listingId,cb) {
+    //Find Listing details
+    Listing.findOne({
+      where: {
+        id: listingId,
+        userId:Listing.app.currentUserId
+      }
+    },function (err,result) {
+      if(err) {
+        return cb(new Error('Listing Details Get Failed',result));
+      }
+
+      request(result.link, function(error, response, html){
+        if(err) {
+          return cb(new Error('Scraping Listing Details Failed',result));
+        }
+
+        var $ = cheerio.load(html);
+
+        var listDesc = $('#adDescription').text();
+
+        result.itemRead = true;
+        Listing.upsert(result, function (err, upsertResponse){
+          if(err) {
+            return cb(new Error('Listing Details Update Failed',result));
+          }
+          upsertResponse.description = listDesc;
+          return cb(null,{status:'success','data':upsertResponse});
+        });
+      });
+    });
+  };
+
+  Listing.saveListing = function (listingId,cb) {
+    //Find Listing details
+    Listing.findOne({
+      where: {
+        and:[
+          {id: listingId},
+          {userId:Listing.app.currentUserId}
+        ]
+      }
+    },function (err,result) {
+      if(err) {
+        return cb(new Error('Listing Details Get Failed',result));
+      }
+      result.itemRead = true;
+      result.itemSaved = true;
+      Listing.upsert(result, function (err, upsertResponse){
+        if(err) {
+          return cb(new Error('Listing Details Update Failed',result));
+        }
+        return cb(null,{status:'success','data':'Listing Saved Successfully'});
+      });
+    });
+  };
+
+  Listing.removeListing = function (listingId,cb) {
+    //Find Listing details
+    Listing.destroyAll({
+      and:[
+        {id: listingId},
+        {userId:Listing.app.currentUserId}
+      ]
+    },function (err,result) {
+      if(err) {
+        return cb(new Error('Listing Remove Failed',result));
+      }
+      console.log(result);
+      return cb(null,{status:'success','data':'Listing Removed Successfully'});
+    });
+  };
+
+  Listing.remoteMethod('getSearchedList',
     {
+      accepts: {arg: 'prefId', type: 'string'},
       returns: {arg: 'response', type: 'object', http: {source:'root'}},
-      http: {path: '/getList', verb: 'get'}
+      http: {path: '/getSearchedList', verb: 'get'}
     }
   );// End remoteMethod
 
-  Listing.remoteMethod('invokeScrape',
+
+  Listing.remoteMethod('getSavedList',
     {
+      accepts: {arg: 'prefId', type: 'string'},
       returns: {arg: 'response', type: 'object', http: {source:'root'}},
-      http: {path: '/invokeScrape', verb: 'post'}
+      http: {path: '/getSavedList', verb: 'get'}
     }
   );// End remoteMethod
+
+
+  Listing.remoteMethod('getDetails',
+    {
+      accepts: {arg: 'listingId', type: 'string'},
+      returns: {arg: 'response', type: 'object', http: {source:'root'}},
+      http: {path: '/getDetails', verb: 'get'}
+    }
+  );// End remoteMethod
+
+
+  Listing.remoteMethod('saveListing',
+    {
+      accepts: {arg: 'listingId', type: 'string'},
+      returns: {arg: 'response', type: 'object', http: {source:'root'}},
+      http: {path: '/saveListing', verb: 'get'}
+    }
+  );// End remoteMethod
+
+  Listing.remoteMethod('removeListing',
+    {
+      accepts: {arg: 'listingId', type: 'string'},
+      returns: {arg: 'response', type: 'object', http: {source:'root'}},
+      http: {path: '/removeListing', verb: 'get'}
+    }
+  );// End remoteMethod
+
 
 
 };//end module export

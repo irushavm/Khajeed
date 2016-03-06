@@ -1,5 +1,5 @@
 {
-  "name": "Listing",
+  "name": "Preference",
   "base": "Model",
   "idInjection": true,
   "options": {
@@ -10,26 +10,19 @@
       "type": "string",
       "required": true
     },
-    "price": {
+    "city": {
       "type": "string",
       "required": true
     },
-    "postDate": {
-      "type": "date",
-      "required": true
-    },
-    "link": {
+    "category": {
       "type": "string",
       "required": true
     },
-    "imageLink": {
-      "type": "string"
+    "keywords": {
+      "type":["string"]
     },
-    "itemRead":{
-      "type": "boolean"
-    },
-    "itemSaved":{
-      "type": "boolean"
+    "filter": {
+      "type":["string"]
     },
     "userId": {
       "type": "string"
@@ -42,9 +35,9 @@
           "type": "belongsTo",
           "foreignKey": "userId"
         },
-    "preference": {
-          "model": "Preference",
-          "type": "belongsTo",
+    "listing": {
+          "model": "Listing",
+          "type": "hasOne",
           "foreignKey": "preferenceId"
         }
   },
