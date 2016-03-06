@@ -40,7 +40,7 @@ module.exports = function(Listing) {
     Listing.find({
       fields:['title','imageLink','name','price','id'],
       where: {
-        userId:Listing.app.currentUserId
+        and:[{userId:Listing.app.currentUserId},{preferenceId:prefId}]
       }
     },function (err,result) {
       if(err) {
@@ -138,8 +138,8 @@ module.exports = function(Listing) {
     //Find Listing details
     Listing.destroyAll({
       and:[
-        {id: listingId},
-        {userId:Listing.app.currentUserId}
+        {'id': listingId},
+        {'userId':Listing.app.currentUserId}
       ]
     },function (err,result) {
       if(err) {

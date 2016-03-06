@@ -17,10 +17,10 @@
   		Go-To-Link	
 		</a>
 	
-        <button class="button button-block button-energized ng-hide" ng-hide="{{details.itemSaved}}" ng-click="saveListing({{details.id}})">
+        <button class="button button-block button-energized" ng-click="saveListing({{details.id}})">
   		Save
 		</button>
-	<button class="button button-block button-assertive ng-hide" ng-hide="!{{details.itemSaved}}" ng-click="saveListing({{details.id}})">
+	<button class="button button-block button-assertive" ng-click="removeListing({{details.id}})">
   		Remove
 		</button>
         </p>
