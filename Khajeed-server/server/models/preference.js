@@ -1,13 +1,8 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var CronJob = require('cron').CronJob;
-<<<<<<< HEAD
-
-var listOfPrefs = {}
-
-=======
 var preferenceList = [];
->>>>>>> 39deb81dd75af35de09f85d863ba2c91e455d9f7
+
 module.exports = function(Preference) {
 
   var PREF_LOCATIONS = {
@@ -106,40 +101,11 @@ module.exports = function(Preference) {
         error.code = 'PREFERENCE_ADDITION_FAILED';
         return cb(error);
       }
-<<<<<<< HEAD
-        return cb(null,{status:'success','data':'Preference Successfully Added'});
-
-    });
-=======
       preferenceList.push(result);
       return cb(null,{status:'success','data':'Preference Successfully Added'});
     });
 
-
->>>>>>> 39deb81dd75af35de09f85d863ba2c91e455d9f7
   };
-
-  new CronJob('* * * * *', function() {
-   console.log('You will see this message every hour');
-    console.log(preferenceList);
-       preferenceList.forEach(function(item) {
-         setTimeout(function () {
-            console.log('After Delay');
-           invokeScrape(item,function(error,response){
-             if(error) {
-               console.log(error);
-             }
-           });
-         }, 1000);
-     });
-  }, null, true, 'America/Los_Angeles',null,true).start();
-
-  function getAndPushResults () {
-      Preference.find({}), function(result) {
-        result.forEach(
-          )
-      }
-  } 
 
 var CronJob = require('cron').CronJob;
 new CronJob('* * * * *', function() {

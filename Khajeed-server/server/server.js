@@ -5,7 +5,7 @@ var app = module.exports = loopback();
 
 app.start = function() {
   // start the web server
-  var port = process.env.PORT||5000;
+  var port = process.env.PORT || 5000;
   return app.listen(port,function() {
     app.emit('started');
     var baseUrl = app.get('url').replace(/\/$/, '');
@@ -54,7 +54,3 @@ boot(app, __dirname, function(err) {
   if (require.main === module)
     app.start();
 });
-<<<<<<< HEAD
-
-=======
->>>>>>> 39deb81dd75af35de09f85d863ba2c91e455d9f7
