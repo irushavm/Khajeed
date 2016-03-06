@@ -1,7 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var CronJob = require('cron').CronJob;
-
+var preferenceList = [];
 module.exports = function(Preference) {
 
   var PREF_LOCATIONS = {
@@ -100,21 +100,27 @@ module.exports = function(Preference) {
         error.code = 'PREFERENCE_ADDITION_FAILED';
         return cb(error);
       }
-      newModel.id = result.id;
-      invokeScrape(newModel, function(err,postData){
-        if(err) {
-          error = new Error('invokeScrape Failed '+err);
-          error.statusCode = 500;
-          error.code = 'INVOKESCRAPE_FAILED';
-          return cb(error);
-        }
-
-        return cb(null,{status:'success','data':'Preference Successfully Added'});
-
-      });
+      preferenceList.push(result);
+      return cb(null,{status:'success','data':'Preference Successfully Added'});
     });
+
+
   };
 
+  new CronJob('*/5 * * * * *', function() {
+   console.log('You will see this message every hour');
+    console.log(preferenceList);
+       preferenceList.forEach(function(item) {
+         setTimeout(function () {
+            console.log('After Delay');
+           invokeScrape(item,function(error,response){
+             if(error) {
+               console.log(error);
+             }
+           });
+         }, 1000);
+     });
+  }, null, true, 'America/Los_Angeles',null,true).start();
 
   function invokeScrape (preference,cb) {
 
