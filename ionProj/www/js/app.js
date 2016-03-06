@@ -60,6 +60,18 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
         }
       }
     })
+
+  .state('app.preferences', {
+      url: '/preferences',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/preferences.html'
+        }
+      },
+      controller: 'PreferencesCtrl' 
+      }       
+    )
+
     .state('app.topics', {
       url: '/topics',
       views: {

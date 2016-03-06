@@ -44,21 +44,23 @@ angular.module('starter.controllers', [])
 .controller('LoginCtrl', function($scope,$state,$ionicPopup,$window,LoginService) {
     $scope.data = {};
  
-    $scope.performLogin = function() {
-        LoginService.loginUser($scope.data.username, $scope.data.password);
-	if($window.loginstatus != 0){       
-		$state.go('app.browse');
-	}else{
-		var alertPopup = $ionicPopup.alert({
-			title: 'Login Failed!',
-			template: 'Please Check your information!!!'
-	   	 });	
-	}
+  $scope.performLogin = function() {
+      LoginService.loginUser($scope.data.username, $scope.data.password);
+    
+      if($window.token){       
+        $state.go('app.preferences');
+      }
+      else{
+        var alertPopup = $ionicPopup.alert({
+           title: 'Login Failed!',
+           template: 'Please Check your information!!!'
+        }); 
+      }
     };
 
-    $scope.performSignUp = function() {
-	$state.go('signup');
-    };
+  $scope.performSignUp = function() {
+	  $state.go('signup');
+  };
 })
 
 .controller('SignupCtrl', function($scope,$state,$ionicPopup,SignupService) {
@@ -68,6 +70,27 @@ angular.module('starter.controllers', [])
         SignupService.signupUser($scope.data.username, $scope.data.password);
 	$state.go('login');
     };
+
+})
+
+.controller('PreferencesCtrl', function($scope,$state,$ionicPopup,$window,PreferencesService) {
+    $scope.data = {};
+ 
+    $scope.addPreferences = function() {
+        PreferencesService.AddPrefs($scope.data.tittle, $scope.data.city, $scope.data.category, $scope.data.keywords, $scope.data.filters);
+        // $state.go('preferences');
+
+        // if($window.token){       
+          var alertPopup = $ionicPopup.alert({
+             title: 'Preferences Added',
+             template: 'WE ADDED YOUR PREFERENCES!!!'
+          });
+        // }
+    };  
+
+  $scope.doPrefs = function() {
+    console.log('Doing preferences', $scope.prefsData);
+  };
 
 })
 
