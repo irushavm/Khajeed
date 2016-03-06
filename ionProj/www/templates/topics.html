@@ -3,10 +3,14 @@
     <ion-list>
       <ion-item ng-repeat="choice in choices">
 
-	<button class="button button-block button-energized" ng-click="getSearchData({{choice.id}})">
-	  {{choice.title}}, {{choice.city}}, {{choice.category}}
-	</button>
-        
+	<card class="button button-block button-white" ng-click="getSearchData({{choice.id}})">
+	  <div class="row">
+      <div class="col"><h1>{{choice.title}}</h1></div>
+      <div class="col"><b>Search City</b><br>{{choice.city}}</div>
+      <div class="col"><b>Search Category</b><br>{{choice.category}}</div>
+    </div>
+	</card>
+
       </ion-item>
     </ion-list>
   </ion-content>

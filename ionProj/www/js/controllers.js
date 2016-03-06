@@ -116,7 +116,11 @@ angular.module('starter.controllers', [])
 		// do the api call to get all the data using the topicId
 		$state.go('app.single', {}, {reload: true});
 	};
-	$scope.getChoices();
+
+
+$scope.$on('$ionicView.beforeEnter', function() {
+  	$scope.getChoices();
+});
 
 })
 
