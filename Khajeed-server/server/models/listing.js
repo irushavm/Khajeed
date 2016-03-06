@@ -103,6 +103,7 @@ module.exports = function(Listing) {
   };
 
   Listing.saveListing = function (listingId,cb) {
+    console.log('**********LSITING ID**********', listingId);
     var error;
     //Find Listing details
     Listing.findOne({
@@ -113,6 +114,7 @@ module.exports = function(Listing) {
         ]
       }
     },function (err,result) {
+      console.log(result);
       if(err) {
         error = new Error('Listing Details Get Failed ',err);
         error.statusCode = 500;
