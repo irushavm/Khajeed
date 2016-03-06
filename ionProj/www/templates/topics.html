@@ -1,9 +1,9 @@
 <ion-view view-title="Listing">
-  <ion-content>
+  <ion-content class="padding">
     <ion-list>
       <ion-item ng-repeat="choice in choices">
 
-	<button class="button button-block button-positive" ng-click="getSearchData({{choice.id}})">
+	<button class="button button-block button-energized" ng-click="getSearchData({{choice.id}})">
 	  {{choice.title}}, {{choice.city}}, {{choice.category}}
 	</button>
         

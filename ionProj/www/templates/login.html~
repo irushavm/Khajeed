@@ -1,3 +1,8 @@
+<style>
+  .background, .background .pane, .background .item, .background .item-complex .item-content {
+    background-color: yellow;
+	};
+</style>
 <ion-modal-view>
   <ion-header-bar>
     <h1 class="title">Login</h1>
@@ -14,10 +19,10 @@
           <input type="password" ng-model="data.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" ng-click="performLogin()">Log in</button>
-	  <button class="button button-block button-positive" ng-click="performSignUp()">Sign Up</button>
+          <button class="button button-block button-energized" ng-click="performLogin()">Log in</button> 
         </label>
       </div>
     </form>
+	<button class="button button-block button-energized" ng-click="performSignUp()">Sign Up</button>
   </ion-content>
 </ion-modal-view>

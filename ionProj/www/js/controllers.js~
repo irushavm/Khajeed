@@ -178,7 +178,7 @@ angular.module('starter.controllers', [])
 		$http({
 		  method: 'POST',
 		  url: 'http://10.216.234.94:3000/api/Listings/saveListing/',
-		  params: {id:$window.pickedId, access_token: $window.token}
+		  params: {listingId:$window.pickedId, access_token: $window.token}
 		}).then(function (successResponse) {
 				console.log(successResponse);	
 			},
@@ -191,7 +191,7 @@ angular.module('starter.controllers', [])
 		$http({
 		  method: 'POST',
 		  url: 'http://10.216.234.94:3000/api/Listings/removeListing/',
-		  params: {id:$window.pickedId, access_token: $window.token}
+		  params: {listingId:$window.pickedId, access_token: $window.token}
 		}).then(function (successResponse) {
 				console.log(successResponse);	
 			},

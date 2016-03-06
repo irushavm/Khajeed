@@ -1,5 +1,5 @@
 <ion-view view-title="Listing">
-  <ion-content>
+  <ion-content class="padding">
     <ion-list>
       <ion-item ng-repeat="choice in choices">
 

@@ -14,7 +14,7 @@
           <input type="password" ng-model="data.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" ng-click="finishSignUp()">Signup</button> 
+          <button class="button button-block button-positive" ng-click="finishSignupProcess()">Signup</button> 
         </label>
       </div>
     </form>

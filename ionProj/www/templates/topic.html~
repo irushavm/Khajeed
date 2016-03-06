@@ -1,5 +1,5 @@
 <ion-view view-title="SearchedData">
-  <ion-content class="has-tabs" >
+  <ion-content class="padding">
 	<div class="tabs" class="has-header has-subheader">
 	  <a class="tab-item" ng-click="getSearchedData()">
 	    Latest
