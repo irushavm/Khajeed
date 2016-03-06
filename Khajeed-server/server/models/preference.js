@@ -1,7 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var CronJob = require('cron').CronJob;
-var preferenceList = [];
+
 
 module.exports = function(Preference) {
 
@@ -101,26 +101,29 @@ module.exports = function(Preference) {
         error.code = 'PREFERENCE_ADDITION_FAILED';
         return cb(error);
       }
-      preferenceList.push(result);
       return cb(null,{status:'success','data':'Preference Successfully Added'});
     });
 
   };
 
-var CronJob = require('cron').CronJob;
-new CronJob('* * * * *', function() {
-  console.log('You will see this message every hour');
-  Preference.find({},function(error,data){
-      data.forEach(function(item) {
-        invokeScrape(preference,function(error,response){
-          if(error) {
-            console.log(error);
-          }
-        });
+  setTimeout(function () {
+    new CronJob('* * * * *', function() {
+     console.log('You will see this message every hour');
+      Preference.find({},function(err,prefs){
+        console.log(prefs);
+        prefs.forEach(function(item) {
+          setTimeout(function () {
+             console.log('After Delay');
+            invokeScrape(item,function(error,response){
+              if(error) {
+                console.log(error);
+              }
+            });
+          }, 10000);
+       });
       });
-
-  });
-}, null, true, 'America/Los_Angeles').start();
+    }, null, true, 'America/Los_Angeles',null,true).start();
+  },2000);
 
 
   function invokeScrape (preference,cb) {
@@ -148,8 +151,10 @@ new CronJob('* * * * *', function() {
                 return cb(new Error('Listing Find Failed ', err));
               }
 
+              if((!findResult.length) && preference.filter &&
+              Array.isArray(preference.filter) &&
+              (preference.filter.indexOf(itemTitle)>-1)) {
               //If no record of listing exists in database or if the title does not match a filter word
-              if((!findResult.length)&&(preference.filter.replace(' ','').indexOf(itemTitle)>-1)) {
                 var newModel = {
                   title: itemTitle,
                   price: data.find('.price').text().replace(/\s/g, ''),
