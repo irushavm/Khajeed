@@ -33,100 +33,46 @@ angular.module('starter', ['ionic', 'starter.services','starter.controllers'])
 
   .state('login', {
       url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
+      templateUrl: 'templates/userlogin.html',
+      controller: 'LoginController'
   })
 
-  .state('signup', {
-      url: '/signup',
-      templateUrl: 'templates/signup.html',
-      controller: 'SignupCtrl'
-  })
-
-  .state('app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
-    }
-  })
-
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.preferenceadd', {
+      url: '/preferenceadd',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/preferenceadd.html',
+          controller: 'PreferenceAddController'
         }
       }
     })
 
-  .state('app.preferences', {
-      url: '/preferences',
+    .state('app.preferencelist', {
+      url: '/preferencelist',
       views: {
         'menuContent': {
-          templateUrl: 'templates/preferences.html',
-          controller: 'PreferencesCtrl' 
-        }
-      }
-    })
-
-    .state('app.topics', {
-      url: '/topics',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/topics.html',
-          controller: 'TopicsCtrl'
+          templateUrl: 'templates/preferencelist.html',
+          controller: 'PreferenceListController'
         }
       }
     })
 
   .state('app.single', {
-    url: '/topics/:topicId',
+    url: '/listings',
     views: {
       'menuContent': {
-        templateUrl: 'templates/topic.html',
-        controller: 'TopicCtrl'
+        templateUrl: 'templates/listings.html',
+        controller: 'ListingsController'
       }
     }
   })
 
-   .state('app.result', {
-      url: '/result',
+   .state('app.listingdetails', {
+      url: '/details',
       views: {
         'menuContent': {
-          templateUrl: 'templates/result.html',
-          controller: 'ResultCtrl'
-        }
-      }
-    })
-
- .state('app.preftopics', {
-      url: '/preftopics',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/preftopics.html',
-          controller: 'PrefTopicsCtrl'
-        }
-      }
-    })
-
-  .state('app.prefsingle', {
-    url: '/preftopics/:preftopicId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/preftopic.html',
-        controller: 'PrefTopicCtrl'
-      }
-    }
-  })
-
-   .state('app.prefresult', {
-      url: '/prefresult',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/prefresult.html',
-          controller: 'PrefResultCtrl'
+          templateUrl: 'templates/listingdetails.html',
+          controller: 'ListingDetailsController'
         }
       }
     });

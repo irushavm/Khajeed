@@ -1,0 +1,19 @@
+<ion-view view-title="Preference Listings">
+  <ion-content class="padding">
+    <ion-list class= "padding">
+      <ion-item class="item-light padding" ng-repeat="choice in choices" ng-click="getSearchData({{choice.id}})">
+      	  <div class="row responsive-lg">
+            <div class="col col-50"><h1>{{choice.title}}</h1></div>
+            <div class="col col-20"><b>Search City</b><br>{{choice.city}}</div>
+            <div class="col col-20"><b>Search Category</b><br>{{choice.category}}</div>
+            <div class="col col-20"><b>Keywords</b><br>
+              <div ng-repeat="keys in choice.keywords">
+                {{keys}}<div ng-if="choice.keywords.length>1">,</div>
+              </div>
+            </div>
+            <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+          </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

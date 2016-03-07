@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl',function($scope, $ionicModal, $timeout) {
+.controller('AppController',function($scope, $ionicModal, $timeout) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -41,52 +41,82 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('LoginCtrl', function($scope,$state,$ionicPopup,$window,LoginService) {
+.controller('LoginController', function($scope,$state,$ionicPopup,$window,LoginService) {
     $scope.data = {};
-
+    $state.go($state.current, {}, {reload: true});
   $scope.performLogin = function() {
       LoginService.loginUser($scope.data.username, $scope.data.password,function (){
         if($window.token){
-          $state.go('app.preferences', {}, {reload: true});
+          $state.go('app.preferencelist');
         }
         else{
           var alertPopup = $ionicPopup.alert({
-             title: 'Login Failed!',
-             template: 'Please Check your information!!!'
+             title: 'Login Failed',
+             template: 'Please re-try again'
           });
         }
       });
     };
 
-  $scope.performSignUp = function() {
-	  $state.go('signup');
-  };
-})
-
-.controller('SignupCtrl', function($scope,$state,$ionicPopup,SignupService) {
+  $scope.performRegistration = function() {
     $scope.data = {};
 
-    $scope.finishSignupProcess = function() {
-        SignupService.signupUser($scope.data.username, $scope.data.password);
-	$state.go('login', {}, {reload: true});
-    };
+    // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+      template: '<input type="email" ng-model="data.email"><input type="password" ng-model="data.password">',
+      title: 'Register with an Email and Password',
+      subTitle: 'Please use normal things',
+      scope: $scope,
+      buttons: [
+        {
+          text: '<b>Cancel</b>',
+          type: 'button-energized'
+        },
+        {
+          text: '<b>Save</b>',
+          type: 'button-energized',
+          onTap: function(e) {
+            if (!$scope.data.email || !$scope.data.password) {
+              //don't allow the user to close unless he enters wifi password
+              e.preventDefault();
+            } else {
+              return {email:$scope.data.email,password:$scope.data.password};
+            }
+          }
+        },
+      ]
+    }).then(function(response) {
+      LoginService.signupUser(response.email, response.password, function(err) {
+        if(err) {
+          var alertPopup = $ionicPopup.alert({
+             title: 'Registration Failed',
+             template: 'Please try again'
+          });
+        }
+      });
+    });
+  };
 
 })
 
-.controller('PreferencesCtrl', function($scope,$state,$ionicPopup,$window,PreferencesService) {
+
+.controller('PreferenceAddController', function($scope,$state,$ionicPopup,$window,PreferenceAddService) {
   $scope.data = {};
 
   $scope.addPreferences = function() {
-      PreferencesService.AddPrefs(
-        $scope.data.tittle, $scope.data.city, $scope.data.category, $scope.data.keywords.split(", "), $scope.data.filters.split(", "));
-
-      // if($window.token){
-      var alertPopup = $ionicPopup.alert({
-         title: 'Preferences Added',
-         template: 'WE ADDED YOUR PREFERENCES!!!'
+      PreferenceAddService.AddPrefs($scope.data.tittle, $scope.data.city,
+      $scope.data.category, $scope.data.keywords.split(", "), ['']/*$scope.data.filters.split(", ")*/, function (err) {
+        if(err) {
+          console.error(err);
+        }
+        else{
+          $state.go('app.preferencelist');
+          var alertPopup = $ionicPopup.alert({
+             title: 'Preferences Added',
+             template: 'Check the \'My Preferences\' page '
+          });
+        }
       });
-      $state.go('app.preferences', {}, {reload: true});
-      // }
   };
 
   $scope.doPrefs = function() {
@@ -95,11 +125,11 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('TopicsCtrl', function($scope,$window,$state,$http) {
+.controller('PreferenceListController', function($scope,$window,$state,$http) {
 	$scope.getChoices = function(){
 		$http({
 		  method: 'GET',
-		  url: 'http://10.216.234.94:3000/api/Preferences/getList/',
+		  url: 'http://localhost:3000/api/Preferences/getList/',
 		  params: {access_token: $window.token}
 		}).then(function successCallback(response) {
                     console.log(response);
@@ -124,18 +154,17 @@ $scope.$on('$ionicView.beforeEnter', function() {
 
 })
 
-.controller('TopicCtrl', function($scope, $window, $state, $stateParams,$http) {
+.controller('ListingsController', function($scope, $window, $state, $stateParams,$http) {
 	$scope.getSearchedData = function(){
     $scope.searchedData = [];
 		$http({
 		  method: 'GET',
-		  url: 'http://10.216.234.94:3000/api/Listings/getSearchedList/',
+		  url: 'http://localhost:3000/api/Listings/getSearchedList/',
 		  params: {prefId: $window.categoryId , access_token: $window.token}
 		}).then(function successCallback(response) {
 		    console.log(response);
 		    $scope.searchedData = response.data.response.data;
-		    // this callback will be called asynchronously
-		    // when the response is available
+
 		  }, function errorCallback(response) {
 		    // called asynchronously if an error occurs
 		    // or server returns response with an error status.
@@ -144,7 +173,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
 	$scope.getFavoriteData = function(){
 		$http({
 		  method: 'GET',
-		  url: 'http://10.216.234.94:3000/api/Listings/getSavedList/',
+		  url: 'http://localhost:3000/api/Listings/getSavedList/',
 		  params: {prefId: $window.categoryId , access_token: $window.token}
 		}).then(function successCallback(response) {
 		    console.log(response);
@@ -159,23 +188,22 @@ $scope.$on('$ionicView.beforeEnter', function() {
 	$scope.goToPickedResult = function(topicId) {
 		$window.pickedId = topicId;
 		// do the api call to get all the data using the topicId
-		$state.go('app.result', {}, {reload: true});
+		$state.go('app.listingdetails');
 	};
 
   	$scope.getSearchedData();
 })
 
-.controller('ResultCtrl', function($scope, $window, $stateParams,$state,$http) {
+.controller('ListingDetailsController', function($scope, $window, $stateParams,$state,$http) {
 	$scope.getListing = function(){
+    $scope.details = {};
 		$http({
 		  method: 'GET',
-		  url: 'http://10.216.234.94:3000/api/Listings/getDetails/',
+		  url: 'http://localhost:3000/api/Listings/getDetails/',
 		  params: {listingId: $window.pickedId , access_token: $window.token}
 		}).then(function successCallback(response) {
 		     console.log(response);
 		     $scope.details = response.data.response.data;
-		    // this callback will be called asynchronously
-		    // when the response is available
 		  }, function errorCallback(response) {
 		    // called asynchronously if an error occurs
 		    // or server returns response with an error status.
@@ -185,7 +213,7 @@ $scope.$on('$ionicView.beforeEnter', function() {
 	$scope.saveListing = function(listingId){
 		$http({
 		  method: 'POST',
-		  url: 'http://10.216.234.94:3000/api/Listings/saveListing/',
+		  url: 'http://localhost:3000/api/Listings/saveListing/',
 		  params: {listingId:$window.pickedId, access_token: $window.token}
 		}).then(function (successResponse) {
 				console.log(successResponse);
@@ -198,16 +226,18 @@ $scope.$on('$ionicView.beforeEnter', function() {
 	$scope.removeListing = function(listingId){
 		$http({
 		  method: 'POST',
-		  url: 'http://10.216.234.94:3000/api/Listings/removeListing/',
+		  url: 'http://localhost:3000/api/Listings/removeListing/',
 		  params: {listingId:$window.pickedId, access_token: $window.token}
 		}).then(function (successResponse) {
 				console.log(successResponse);
-        $state.go('app.single', {}, {reload: true});
+        $state.go('app.single');
 			},
 			function (errorResponse) {
 				console.log(errorResponse);
 			});
 	};
 
-	$scope.getListing();
+  $scope.$on('$ionicView.beforeEnter', function() {
+		$scope.getListing();
+  });
 });

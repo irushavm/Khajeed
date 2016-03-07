@@ -1,1 +1,51 @@
 /* Empty. Add your own CSS if you like */
+ion-nav-view {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: #fff;
+}
+.login-page {
+  background-color: #ffc900;
+  width:%50;
+}
+
+.energized-back {
+  background-color: #ffc900;
+}
+
+
+.popup-buttons .button {
+
+    background-color:  #ffc900;
+
+    font-size: 20px;
+
+}
+
+.popup-buttons .button.activated {
+
+    background-color:  #e6b500;
+
+    font-size: 20px;
+
+}
+
+
+@media (min-width: 767px) {
+  .menu-content {
+    -webkit-transform: translate3d(270px, 0px, 0px) !important;
+    width: calc(100% - 270px) !important;
+  }
+
+  .bar-header button.ion-navicon {
+    display: none;
+  }
+}
+
+
+.desc-spacing {
+  line-height: 200%;
+}

@@ -1,0 +1,49 @@
+<ion-view view-title="Listing">
+  <ion-content class="padding">
+    <div class="list padding">
+      <div class="row responsive-lg">
+        <div class="col">
+          <div class="row row-10">
+            <h1 class="wrap">{{details.title}}</h1>
+          </div>
+          <div class="row">
+            <h2>{{details.price}}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row responsive-lg">
+        <div class="col">
+          <div class="row row-center">
+            <div class="col col-80 col-offset-10">
+              <img style="min-width: 100%; height:auto;" src="{{details.imageLink}}">
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row-center">
+            <ion-scroll direction="y" style="height:30vh;" >
+              <h4 class = "padding desc-spacing">
+               {{details.description}}
+             </h4>
+            </ion-scroll>
+        </div>
+          <div class="row-center">
+            <a class="button button-block button-balanced" target="_blank" href="{{details.link}}">
+      		      Visit Listing on Kijiji
+        		</a>
+          </div>
+          <div class="row-center">
+            <button class="button button-block button-energized" ng-click="saveListing({{details.id}})">
+          		Save
+        		</button>
+          </div>
+          <div class="row-center">
+            <button class="button button-block button-assertive" ng-click="removeListing({{details.id}})">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
